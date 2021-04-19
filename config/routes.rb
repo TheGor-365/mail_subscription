@@ -3,7 +3,7 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
 
   resources :projects do
-    resources :tasks    
+    resources :tasks
   end
 
   authenticate :user, lambda { |u| u.admin? } do
@@ -11,6 +11,16 @@ Rails.application.routes.draw do
   end
 
   devise_for :users
-  root to: 'home#index'
+
+  devise_scope :user do
+    
+    authenticated :user do
+      root "projects#index"
+    end
+
+    unauthenticated do
+      root "home#index", as: :unauthenticated_root
+    end
+  end
 
 end
