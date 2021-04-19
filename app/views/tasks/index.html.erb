@@ -1,31 +1,21 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Tasks</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Body</th>
-      <th>Project</th>
-      <th>Complete</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @tasks.each do |task| %>
-      <tr>
-        <td><%= task.body %></td>
-        <td><%= task.project_id %></td>
-        <td><%= task.complete %></td>
-        <td><%= link_to 'Show', task %></td>
-        <td><%= link_to 'Edit', edit_task_path(task) %></td>
-        <td><%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+<div class="max-w-4xl px-10 pt-10 pb-24 mx-auto mt-10 bg-white border rounded shadow-lg">
+  <div class="flex flex-wrap items-center justify-between">
+    <h1 class="mb-4 text-4xl font-bold"><%= @project.title %></h1>
+    <% if @project.author(current_user) %>
+      <%= link_to 'Edit project', edit_project_path(@project), class: "underline" %>
     <% end %>
-  </tbody>
-</table>
+  </div>
 
-<br>
+  <div class="text-lg font-light leading-relaxed text-gray-600">
+    <p class="font-bold text-gray-900">Description:</p>
+    <%= @project.description %>
+  </div>
 
-<%= link_to 'New Task', new_task_path %>
+  <h3 class="pb-3 my-6 text-2xl font-bold border-b">Tasks</h3>
+
+  <ul id="<%= dom_id(@project) %>_tasks" class="mb-6 leading-relaxed" data-controller="tasks">
+    <%= render @project.tasks %>
+  </ul>
+
+  <%= render "tasks/form", task: @task %>
+</div>

@@ -10,6 +10,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1 or /projects/1.json
   def show
+    @task = Task.new
   end
 
   # GET /projects/new
@@ -60,13 +61,13 @@ class ProjectsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_project
-      @project = Project.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_project
+    @project = Project.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def project_params
-      params.require(:project).permit(:title, :description, :user_id)
-    end
+  # Only allow a list of trusted parameters through.
+  def project_params
+    params.require(:project).permit(:title, :description, user_ids: [])
+  end
 end
