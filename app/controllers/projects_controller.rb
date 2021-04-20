@@ -29,10 +29,17 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
-        format.html { redirect_to @project, notice: "Project was successfully created." }
+
+        (@project.users.uniq - [current_user]).each do |user|
+          if user.notify_when_added_to_project?
+            ProjectMailer.with(project: @project, user: user, author: current_user).user_added_to_project.deliver_later
+          end
+        end
+
+        format.html { redirect_to @project, notice: 'Project was successfully created.' }
         format.json { render :show, status: :created, location: @project }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render :new }
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end

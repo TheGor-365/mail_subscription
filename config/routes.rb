@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   devise_scope :user do
-    
+
     authenticated :user do
       root "projects#index"
     end
@@ -22,5 +22,7 @@ Rails.application.routes.draw do
       root "home#index", as: :unauthenticated_root
     end
   end
+
+  match "users/unsubscribe/:unsubscribe_hash" => "emails#unsubscribe", as: "unsubscribe", via: :all
 
 end
